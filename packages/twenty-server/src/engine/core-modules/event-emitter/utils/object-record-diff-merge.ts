@@ -1,3 +1,5 @@
+import { fastDeepEqual } from 'twenty-shared/utils';
+
 export function objectRecordDiffMerge(
   // oxlint-disable-next-line typescript/no-explicit-any
   oldRecord: Record<string, any>,
@@ -22,6 +24,12 @@ export function objectRecordDiffMerge(
   Object.keys(newRecord.diff ?? {}).forEach((key) => {
     if (!result.diff[key]) {
       result.diff[key] = newRecord.diff[key];
+    }
+  });
+
+  Object.keys(result.diff).forEach((key) => {
+    if (fastDeepEqual(result.diff[key].before, result.diff[key].after)) {
+      delete result.diff[key];
     }
   });
 
